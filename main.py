@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 from torch.optim import AdamW
 import argparse
 from tqdm.auto import tqdm
+import time
 
 
 def tokenizer_function(examples):
@@ -30,6 +31,7 @@ def training(args, model, train_dataloader):
 
 #   define a loss list to record loss in each step
     loss = []
+    start = time.time()
     for _ in range(num_epochs):
         for step, batch in enumerate(train_dataloader):
             batch = {k: v.to(device) for k, v in batch.items()}
@@ -40,7 +42,8 @@ def training(args, model, train_dataloader):
             optimizer.step()
             lr_scheduler.step()
             progress_bar.update(1)
-    
+    end = time.time()
+    print('Training time: ' + str(end-start))
 #    save model
     model.save_pretrained(args.saved_dir)
 #    write loss to a file
