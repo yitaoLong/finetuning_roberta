@@ -35,7 +35,7 @@ def training(args, model, train_dataloader):
             batch = {k: v.to(device) for k, v in batch.items()}
             outputs = model(**batch)
             optimizer.zero_grad()
-            loss.append(outputs.loss)
+            loss.append(outputs.loss.item())
             outputs.loss.backward()
             optimizer.step()
             lr_scheduler.step()
